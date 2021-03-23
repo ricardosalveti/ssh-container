@@ -1,0 +1,38 @@
+volumes:
+  sshconfig:
+    driver: local
+  facettelib:
+    driver: local
+  facettecache:
+    driver: local
+
+services:
+  ssh-server:
+    image: ssh-container:latest
+    container_name: ssh-container
+    hostname: ssh-container
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - SUDO_ACCESS=true
+      - PASSWORD_ACCESS=true
+      - USER_NAME=fiossh
+      - USER_PASSWORD=12345678
+    volumes:
+      - /etc/machine-id:/etc/machine-id
+      - /var/log/journal:/var/log/journal
+      - sshconfig:/config
+      - facettelib:/var/lib/facette
+      - facettecache:/var/cache/facette
+    ports:
+      - 2222:2222
+      - 12003:12003
+    restart: unless-stopped
+
+networks:
+   default:
+     driver: bridge
+     driver_opts:
+       com.docker.network.bridge.enable_ip_masquerade: 'false'
+       com.docker.network.bridge.enable_icc: 'false'
