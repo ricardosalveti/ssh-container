@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+
+USER_NAME=facette
+
+exec 2>&1 \
+        s6-setuidgid ${USER_NAME} /usr/local/bin/facette

@@ -1,0 +1,21 @@
+#!/usr/bin/with-contenv bash
+
+USER_NAME=${USER_NAME:-fio}
+
+PUID=${PUID:-911}
+PGID=${PGID:-911}
+
+[[ "$USER_NAME" != "abc" ]] && \
+    usermod -l "$USER_NAME" abc && \
+    groupmod -n "$USER_NAME" abc
+
+groupmod -o -g "$PGID" "$USER_NAME"
+usermod -o -u "$PUID" "$USER_NAME"
+
+# allow user to use journalctl
+addgroup -g 996 -S systemd-journal
+usermod "$USER_NAME" -G systemd-journal
+
+chown "$USER_NAME":"$USER_NAME" /app
+chown "$USER_NAME":"$USER_NAME" /config
+chown "$USER_NAME":"$USER_NAME" /defaults

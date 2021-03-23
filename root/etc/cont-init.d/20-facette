@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+
+USER_NAME=facette
+
+chown "${USER_NAME}" /var/lib/facette
+chown "${USER_NAME}" /var/cache/facette
